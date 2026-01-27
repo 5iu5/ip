@@ -17,17 +17,29 @@ public class Yola {
 
         String line;
         Scanner in = new Scanner(System.in);
+        String[] textList = new String[100];
+        int listSize = 0;
 
         while(true){
             line = in.nextLine();
             if (line.equals("bye")){
                 break;
             }
-            System.out.println("    ____________________________________________________________");
-            System.out.print("    ");
+            if (line.equals("list")){
+                System.out.println("    ____________________________________________________________");
+                for (int i = 0; i < listSize; i += 1){
+                    System.out.println("     " + (i+1)+ ". " + textList[i]);
+                }
+                System.out.println("    ____________________________________________________________");
+            }
+            else{
+                textList[listSize] = line;
+                listSize += 1;
+                System.out.println("    ____________________________________________________________");
+                System.out.println("     added: " + line);
+                System.out.println("    ____________________________________________________________");
+            }
 
-            System.out.println(line);
-            System.out.println("    ____________________________________________________________");
         }
 
 
