@@ -28,7 +28,6 @@ public class Yola {
             if (line.equals("bye")){
                 break;
             }
-
             if (line.equals("list")){
                 System.out.println("    ____________________________________________________________");
                 System.out.println("    Here are the tasks in your list:");
@@ -37,18 +36,17 @@ public class Yola {
                 }
                 System.out.println("    ____________________________________________________________");
             }
-
             else if((words[0].equals("mark") || words[0].equals("unmark")) && words.length == 2){
                 //Check if it is a mark/unmark command
-
-
                 try {
                      int taskNum = Integer.parseInt(words[1]);
+
                      if (taskNum < 1 || taskNum > size) {
                          System.out.println("invalid task number");
                          continue;
                      }
-                     Task t = taskList[taskNum-1];
+
+                    Task t = taskList[taskNum-1];
                     System.out.println("    ____________________________________________________________");
 
                     if (words[0].equals("mark")){
@@ -61,7 +59,8 @@ public class Yola {
                          t.unmark();
                          System.out.println("        OK, I've marked this task as not done yet:");
                      }
-                     System.out.println("      " + "[" + t.getStatusIcon() + "] " + t.description);
+
+                     System.out.println("      " + "[" + t.getStatusIcon() + "] " + t.getDescription());
                      System.out.println("    ____________________________________________________________");
 
                 }catch (NumberFormatException e) {
@@ -76,13 +75,9 @@ public class Yola {
                 System.out.println("     added: " + line);
                 System.out.println("    ____________________________________________________________");
             }
-
         }
-
-
         System.out.println("    ____________________________________________________________");
         System.out.println("    Bye. Hope to see you again soon!");
         System.out.println("    ____________________________________________________________");
-
     }
 }
