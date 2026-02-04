@@ -4,21 +4,12 @@ public class Yola {
     private static final Task[] tasks = new Task[100];
     private static int size = 0;
 
-    public static void addTask(String description) {
-        Task t = new Task(description);
-        tasks[size] = t;
-        size += 1;
-
-        System.out.println("    ____________________________________________________________");
-        System.out.println("     added: " + description);
-        System.out.println("    ____________________________________________________________");
-    }
 
     public static void printTasks() {
         System.out.println("    ____________________________________________________________");
         System.out.println("    Here are the tasks in your list:");
         for (int i = 0; i < size; i += 1) {
-            System.out.println("    " + (i + 1) + ".[" + tasks[i].getStatusIcon() + "] " + tasks[i].description);
+            System.out.println("    " + (i + 1) + "." + tasks[i].toString());
         }
         System.out.println("    ____________________________________________________________");
     }
@@ -41,6 +32,15 @@ public class Yola {
         System.out.println("        OK, I've marked this task as not done yet:");
         System.out.println("      " + "[" + t.getStatusIcon() + "] " + t.getDescription());
         System.out.println("    ____________________________________________________________");
+    }
+
+    public static void printTask(Task t) {
+        System.out.println("    ____________________________________________________________");
+        System.out.println("    Got it. I've added this task:");
+        System.out.println("      " + t.toString());
+        System.out.println("    Now you have " + size + " tasks in the list.");
+        System.out.println("    ____________________________________________________________");
+
     }
 
     public static void main(String[] args) {
@@ -100,8 +100,40 @@ public class Yola {
                 }
                 unmarkTask(taskNum);
                 break;
+            case "todo":
+                // get the string after "todo "
+                String description = line.substring(5);
+                Todo t = new Todo(description);
+                tasks[size] = t;
+                size += 1;
+                printTask(t);
+                break;
+            case "deadline":
+                String[] parts = line.substring(9).split(" /by ");
+                Deadline d = new Deadline(parts[0], parts[1]);
+                tasks[size] = d;
+                size += 1;
+                printTask(d);
+                break;
+            case "event":
+                line = line.substring(6).strip();
+                String eventDescription = line.split(" /from ")[0];
+                String from = line.split(" /from ")[1].split(" /to ")[0];
+                String to = line.split(" /from ")[1].split(" /to ")[1];
+                Event e = new Event(eventDescription, from, to);
+                tasks[size] = e;
+                size += 1;
+                printTask(e);
+                break;
+
             default:
-                addTask(line);
+                Task t2 = new Task(line);
+                tasks[size] = t2;
+                size += 1;
+
+                System.out.println("    ____________________________________________________________");
+                System.out.println("     added: " + t2.description);
+                System.out.println("    ____________________________________________________________");
                 break;
             }
 

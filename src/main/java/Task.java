@@ -6,6 +6,11 @@ public class Task {
         this.description = description;
         this.isDone = false;
     }
+    public Task(){
+        this.description = "";
+        this.isDone = false;
+    }
+
 
     public String getStatusIcon() {
         return isDone ? "X" : " ";
@@ -22,4 +27,8 @@ public class Task {
     public void markUndone() {
         isDone = false;
     }
+    public String toString(){
+        return "[" + getStatusIcon() + "] " + description;
+    }
+
 }
