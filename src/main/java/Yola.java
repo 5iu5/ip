@@ -1,15 +1,55 @@
 import java.util.Scanner;
 
 public class Yola {
+    private static final Task[] tasks = new Task[100];
+    private static int size = 0;
 
+    public static void addTask(String description) {
+        Task t = new Task(description);
+        tasks[size] = t;
+        size += 1;
+
+        System.out.println("    ____________________________________________________________");
+        System.out.println("     added: " + description);
+        System.out.println("    ____________________________________________________________");
+    }
+
+    public static void printTasks() {
+        System.out.println("    ____________________________________________________________");
+        System.out.println("    Here are the tasks in your list:");
+        for (int i = 0; i < size; i += 1) {
+            System.out.println("    " + (i + 1) + ".[" + tasks[i].getStatusIcon() + "] " + tasks[i].description);
+        }
+        System.out.println("    ____________________________________________________________");
+    }
+
+    public static void markTask(int n) {
+        Task t = tasks[n - 1];
+        t.markDone();
+
+        System.out.println("    ____________________________________________________________");
+        System.out.println("    Nice! I've marked this task as done:");
+        System.out.println("      " + "[" + t.getStatusIcon() + "] " + t.getDescription());
+        System.out.println("    ____________________________________________________________");
+    }
+
+    public static void unmarkTask(int n) {
+        Task t = tasks[n - 1];
+        t.markUndone();
+
+        System.out.println("    ____________________________________________________________");
+        System.out.println("        OK, I've marked this task as not done yet:");
+        System.out.println("      " + "[" + t.getStatusIcon() + "] " + t.getDescription());
+        System.out.println("    ____________________________________________________________");
+    }
 
     public static void main(String[] args) {
 
-        String logo =    " __   __      _       \n"
-                        + " \\ \\ / /___  | | __ _ \n"
-                        + "  \\ V // _ \\ | |/ _` |\n"
-                        + "   | || (_) || | (_| |\n"
-                        + "   |_| \\___/ |_|\\__,_|\n";
+        String logo = " __   __      _       \n"
+                + " \\ \\ / /___  | | __ _ \n"
+                + "  \\ V // _ \\ | |/ _` |\n"
+                + "   | || (_) || | (_| |\n"
+                + "   |_| \\___/ |_|\\__,_|\n";
 
         System.out.println("Hello from\n" + logo);
         System.out.println("    ____________________________________________________________");
@@ -19,62 +59,52 @@ public class Yola {
 
         String line;
         Scanner in = new Scanner(System.in);
-        Task[] taskList = new Task[100];
-        int size = 0;
 
-        while(true){
+        while (true) {
             line = in.nextLine();
-            String[] words = line.strip().split("\\s+");
-            if (line.equals("bye")){
+
+            if (line.equals("bye")) {
                 break;
             }
-            if (line.equals("list")){
-                System.out.println("    ____________________________________________________________");
-                System.out.println("    Here are the tasks in your list:");
-                for (int i = 0; i < size; i += 1){
-                    System.out.println("    " + (i+1)+ ".["+ taskList[i].getStatusIcon() + "] " + taskList[i].description);
-                }
-                System.out.println("    ____________________________________________________________");
-            }
-            else if((words[0].equals("mark") || words[0].equals("unmark")) && words.length == 2){
-                //Check if it is a mark/unmark command
+
+            String[] words = line.strip().split("\\s+");
+            //validation for mark and unmark's 2nd argument
+            boolean isValidNum = false;
+            int taskNum = -1;
+            if (words.length >= 2) {
                 try {
-                     int taskNum = Integer.parseInt(words[1]);
-
-                     if (taskNum < 1 || taskNum > size) {
-                         System.out.println("invalid task number");
-                         continue;
-                     }
-
-                    Task t = taskList[taskNum-1];
-                    System.out.println("    ____________________________________________________________");
-
-                    if (words[0].equals("mark")){
-                         //mark task
-                         t.markDone();
-                         System.out.println("    Nice! I've marked this task as done:");
+                    taskNum = Integer.parseInt(words[1]);
+                    if (taskNum >= 1 && taskNum <= size) {
+                        isValidNum = true;
                     }
-                     else {
-                         //unmark task
-                         t.unmark();
-                         System.out.println("        OK, I've marked this task as not done yet:");
-                     }
-
-                     System.out.println("      " + "[" + t.getStatusIcon() + "] " + t.getDescription());
-                     System.out.println("    ____________________________________________________________");
-
-                }catch (NumberFormatException e) {
-                    System.out.println("Please enter a valid task number.");
+                } catch (NumberFormatException e) {
+                    isValidNum = false;
                 }
             }
-            else{
-                Task t = new Task(line);
-                taskList[size] = t;
-                size += 1;
-                System.out.println("    ____________________________________________________________");
-                System.out.println("     added: " + line);
-                System.out.println("    ____________________________________________________________");
+
+            switch (words[0]) {
+            case "list":
+                printTasks();
+                break;
+            case "mark":
+                if (!isValidNum) {
+                    System.out.println("Invalid task!");
+                    break;
+                }
+                markTask(taskNum);
+                break;
+            case "unmark":
+                if (!isValidNum) {
+                    System.out.println("Invalid task!");
+                    break;
+                }
+                unmarkTask(taskNum);
+                break;
+            default:
+                addTask(line);
+                break;
             }
+
         }
         System.out.println("    ____________________________________________________________");
         System.out.println("    Bye. Hope to see you again soon!");
