@@ -102,8 +102,14 @@ public class Yola {
                 break;
             case "todo":
                 // get the string after "todo "
-                String description = line.substring(5);
-                Todo t = new Todo(description);
+                String description = line.substring(4);
+                if (description.isEmpty()){
+                    System.out.println("    ____________________________________________________________");
+                    System.out.println("     no no no... The description must not be empty. Pls try again");
+                    System.out.println("    ____________________________________________________________");
+                    break;
+                }
+                Todo t = new Todo(description.strip());
                 tasks[size] = t;
                 size += 1;
                 printTask(t);
@@ -127,12 +133,8 @@ public class Yola {
                 break;
 
             default:
-                Task t2 = new Task(line);
-                tasks[size] = t2;
-                size += 1;
-
                 System.out.println("    ____________________________________________________________");
-                System.out.println("     added: " + t2.description);
+                System.out.println("    What was that? I don't quite understand");
                 System.out.println("    ____________________________________________________________");
                 break;
             }
