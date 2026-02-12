@@ -69,21 +69,31 @@ public class Yola {
 
             case "todo":
                 // get the string after "todo "
-                String description = line.substring(4);
-                if (description.isEmpty()) {
+                String todoDescription = line.substring(4);
+                if (todoDescription.isEmpty()) {
                     printDivider();
                     System.out.println("     no no no... The description must not be empty. Pls try again");
                     printDivider();
                     break;
                 }
-                Todo t = new Todo(description.strip());
+                Todo t = new Todo(todoDescription.strip());
                 tasks[size] = t;
                 size += 1;
                 printTask(t);
                 break;
             case "deadline":
-                String[] parts = line.substring(9).split(" /by ");
-                Deadline d = new Deadline(parts[0], parts[1]);
+                String deadlineDescription;
+                String deadlineBy;
+                try {
+                    deadlineDescription = Deadline.getDescription(commandBody);
+                    deadlineBy = Deadline.getDeadline(commandBody);
+                } catch (YolaException e) {
+                    printDivider();
+                    System.out.println("    " + e.getMessage());
+                    printDivider();
+                    break;
+                }
+                Deadline d = new Deadline(deadlineDescription, deadlineBy);
                 tasks[size] = d;
                 size += 1;
                 printTask(d);
