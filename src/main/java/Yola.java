@@ -55,11 +55,12 @@ public class Yola {
             case "unmark":
                 unmarkTask(commandBody);
                 break;
-
-
+            case "delete":
+                deleteTask(commandBody);
+                break;
             case "todo":
                 // get the string after "todo "
-                String todoDescription = line.substring(4);
+                String todoDescription = commandBody.trim();
                 if (todoDescription.isEmpty()) {
                     printDivider();
                     System.out.println("     no no no... The description must not be empty. Pls try again");
@@ -68,7 +69,6 @@ public class Yola {
                 }
                 Todo t = new Todo(todoDescription.strip());
                 tasks.add(t);
-
                 printTask(t);
                 break;
             case "deadline":
@@ -134,7 +134,7 @@ public class Yola {
             Task t = tasks.get(taskNum - 1);
             t.markDone();
             System.out.println("    Nice! I've marked this task as done:");
-            System.out.println("      " + "[" + t.getStatusIcon() + "] " + t.getDescription());
+            System.out.println("      " + t);
             printDivider();
         } catch (NumberFormatException e) {
             System.out.println("Please enter a task number");
@@ -156,7 +156,7 @@ public class Yola {
             t.markUndone();
             printDivider();
             System.out.println("        OK, I've marked this task as not done yet:");
-            System.out.println("      " + "[" + t.getStatusIcon() + "] " + t.getDescription());
+            System.out.println("      " + t);
             printDivider();
         } catch (NumberFormatException e) {
             System.out.println("Please enter a task number");
@@ -166,8 +166,31 @@ public class Yola {
 
     }
 
-    public void delete(){
+    public static void deleteTask(String commandBody){
+        try {
+            int taskNum = Integer.parseInt(commandBody);
+            // Check for out of bound
+            if (taskNum > tasks.size()) {
+                throw new IndexOutOfBoundsException();
+            }
+            int taskIndex = taskNum - 1;
+            Task t = tasks.get(taskIndex);
+            // String of task description to print after deleting
+            String taskString = t.toString();
+            tasks.remove(taskIndex);
 
+            // Print successfully deletion message
+            printDivider();
+            System.out.println("        Roger! Successfully delete the task:");
+            System.out.println("      " + taskString);
+            System.out.println("        Now you have " + tasks.size() + " tasks remaining in the list.");
+            printDivider();
+
+        } catch (NumberFormatException e) {
+            System.out.println("Please enter a task number");
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("The task number you entered is out of bound, please try again with a valid number");
+        }
     }
 
     private static void printGoodbye() {
