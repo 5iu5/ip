@@ -1,36 +1,35 @@
+import java.io.IOException;
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.nio.file.Files;
+import java.io.File;
+import java.nio.file.Paths;
+import java.nio.file.Path;
+import java.io.FileWriter;
 
 public class Yola {
+
     private static final ArrayList<Task> tasks = new ArrayList<>();
-
-
-
-    public static void printTasks() {
-        printDivider();
-        System.out.println("    Here are the tasks in your list:");
-        for (int i = 0; i < tasks.size(); i += 1) {
-            System.out.println("    " + (i + 1) + "." + tasks.get(i).toString());
-        }
-        printDivider();
-    }
-
-    public static void printTask(Task t) {
-        printDivider();
-        System.out.println("    Got it. I've added this task:");
-        System.out.println("      " + t.toString());
-        System.out.println("    Now you have " + tasks.size() + " tasks in the list.");
-        printDivider();
-
-    }
 
     public static void main(String[] args) {
 
         printWelcomeMessage();
 
+        // File path with cross-platform support
+        String home = System.getProperty("user.home");
+        // File path format is C:/Users/user/yola/data
+        Path filePath = Paths.get(home, "yola", "data", "yola.txt");
+
+        try {
+            loadFile(filePath);
+        } catch (IOException e) {
+            System.out.println("    Error creating file: " + e.getMessage());
+            System.out.println("    Exiting.......");
+            return;
+        }
+
         String line;
         Scanner in = new Scanner(System.in);
-
 
         while (true) {
 
@@ -51,12 +50,15 @@ public class Yola {
                 break;
             case "mark":
                 markTask(commandBody);
+                saveToFile(filePath);
                 break;
             case "unmark":
                 unmarkTask(commandBody);
+                saveToFile(filePath);
                 break;
             case "delete":
                 deleteTask(commandBody);
+                saveToFile(filePath);
                 break;
             case "todo":
                 // get the string after "todo "
@@ -69,6 +71,7 @@ public class Yola {
                 }
                 Todo t = new Todo(todoDescription.strip());
                 tasks.add(t);
+                saveToFile(filePath);
                 printTask(t);
                 break;
             case "deadline":
@@ -85,6 +88,7 @@ public class Yola {
                 }
                 Deadline d = new Deadline(deadlineDescription, deadlineBy);
                 tasks.add(d);
+                saveToFile(filePath);
                 printTask(d);
                 break;
             case "event":
@@ -94,6 +98,7 @@ public class Yola {
                 String to = line.split(" /from ")[1].split(" /to ")[1];
                 Event e = new Event(eventDescription, from, to);
                 tasks.add(e);
+                saveToFile(filePath);
                 printTask(e);
                 break;
 
@@ -120,6 +125,23 @@ public class Yola {
         System.out.println("    Hello! I'm Yola");
         System.out.println("    What can I do for you?");
         printDivider();
+    }
+    public static void printTasks() {
+        printDivider();
+        System.out.println("    Here are the tasks in your list:");
+        for (int i = 0; i < tasks.size(); i += 1) {
+            System.out.println("    " + (i + 1) + "." + tasks.get(i).toString());
+        }
+        printDivider();
+    }
+
+    public static void printTask(Task t) {
+        printDivider();
+        System.out.println("    Got it. I've added this task:");
+        System.out.println("      " + t.toString());
+        System.out.println("    Now you have " + tasks.size() + " tasks in the list.");
+        printDivider();
+
     }
 
     private static void markTask(String commandBody) {
@@ -166,7 +188,7 @@ public class Yola {
 
     }
 
-    public static void deleteTask(String commandBody){
+    public static void deleteTask(String commandBody) {
         try {
             int taskNum = Integer.parseInt(commandBody);
             // Check for out of bound
@@ -201,5 +223,73 @@ public class Yola {
 
     private static void printDivider() {
         System.out.println("    ____________________________________________________________");
+    }
+
+    private static void loadFile(Path path) throws IOException {
+
+        // Check whether the file exists
+        if (!Files.exists(path)) {
+
+            Files.createDirectories(path.getParent());
+            Files.createFile(path);
+            System.out.println("    Created file yola.txt at: " + path);
+        }
+
+        ArrayList<String> lines = new ArrayList<>(Files.readAllLines(path));
+
+        for (String line: lines){
+            Task t = parseTask(line);
+            if (t != null){
+                tasks.add(t);
+            }
+        }
+    }
+
+    private static Task parseTask(String line){
+
+        String[] words = line.split(" \\| ");
+        String command = words[0];
+        boolean isDone = words[1].equals("1");
+
+        switch (command) {
+        case "T":
+            String todoDescription = words[2];
+            Todo t = new Todo(todoDescription);
+            if (isDone){
+                t.markDone();
+            }
+            return t;
+        case "D":
+            String deadlineDescription = words[2];
+            String deadlineBy = words[3];
+            Deadline d = new Deadline(deadlineDescription, deadlineBy);
+            if (isDone){
+                d.markDone();
+            }
+            return d;
+        case "E":
+            String eventDescription = words[2];
+            String eventFrom = words[3];
+            String eventTo = words[4];
+            Event e = new Event(eventDescription, eventFrom, eventTo);
+            if (isDone){
+                e.markDone();
+            }
+            return e;
+        default:
+            return null;
+        }
+    }
+
+    private static void saveToFile(Path path) {
+        try (FileWriter fw = new FileWriter(path.toString())){
+            for (Task t: tasks){
+                fw.write(t.getFileText());
+                fw.write(System.lineSeparator());
+            }
+
+        } catch (IOException e){
+            System.out.println("Error writing to file: " + e.getMessage());
+        }
     }
 }

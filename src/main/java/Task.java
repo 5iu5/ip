@@ -6,7 +6,8 @@ public class Task {
         this.description = description;
         this.isDone = false;
     }
-    public Task(){
+
+    public Task() {
         this.description = "";
         this.isDone = false;
     }
@@ -27,8 +28,16 @@ public class Task {
     public void markUndone() {
         isDone = false;
     }
-    public String toString(){
+
+
+    public String toString() {
+        // Returns the string representation of the task for printing
         return "[" + getStatusIcon() + "] " + description;
     }
+
+    public String getFileText(){
+        return (isDone? "1": "0") + " | "+ description;
+    }
+
 
 }
