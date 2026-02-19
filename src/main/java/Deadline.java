@@ -31,9 +31,13 @@ public class Deadline extends Task {
         return parts[0];
     }
 
-
     @Override
     public String toString() {
         return "[D]" + super.toString() + " (by: " + by + ")";
+    }
+
+    @Override
+    public String getFileText(){
+        return "D" + " | " + super.getFileText() + " | " + by;
     }
 }
