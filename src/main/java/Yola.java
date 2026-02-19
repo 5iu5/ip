@@ -1,16 +1,16 @@
 import java.util.Scanner;
-import java.util.Arrays;
+import java.util.ArrayList;
 
 public class Yola {
-    private static final Task[] tasks = new Task[100];
-    private static int size = 0;
+    private static final ArrayList<Task> tasks = new ArrayList<>();
+
 
 
     public static void printTasks() {
         printDivider();
         System.out.println("    Here are the tasks in your list:");
-        for (int i = 0; i < size; i += 1) {
-            System.out.println("    " + (i + 1) + "." + tasks[i].toString());
+        for (int i = 0; i < tasks.size(); i += 1) {
+            System.out.println("    " + (i + 1) + "." + tasks.get(i).toString());
         }
         printDivider();
     }
@@ -19,7 +19,7 @@ public class Yola {
         printDivider();
         System.out.println("    Got it. I've added this task:");
         System.out.println("      " + t.toString());
-        System.out.println("    Now you have " + size + " tasks in the list.");
+        System.out.println("    Now you have " + tasks.size() + " tasks in the list.");
         printDivider();
 
     }
@@ -67,8 +67,8 @@ public class Yola {
                     break;
                 }
                 Todo t = new Todo(todoDescription.strip());
-                tasks[size] = t;
-                size += 1;
+                tasks.add(t);
+
                 printTask(t);
                 break;
             case "deadline":
@@ -84,8 +84,7 @@ public class Yola {
                     break;
                 }
                 Deadline d = new Deadline(deadlineDescription, deadlineBy);
-                tasks[size] = d;
-                size += 1;
+                tasks.add(d);
                 printTask(d);
                 break;
             case "event":
@@ -94,8 +93,7 @@ public class Yola {
                 String from = line.split(" /from ")[1].split(" /to ")[0];
                 String to = line.split(" /from ")[1].split(" /to ")[1];
                 Event e = new Event(eventDescription, from, to);
-                tasks[size] = e;
-                size += 1;
+                tasks.add(e);
                 printTask(e);
                 break;
 
@@ -129,10 +127,11 @@ public class Yola {
         try {
             int taskNum = Integer.parseInt(commandBody);
             // Check for out of bound
-            if (taskNum >size) {
+            if (taskNum > tasks.size()) {
                 throw new IndexOutOfBoundsException();
             }
-            Task t = tasks[taskNum - 1];
+
+            Task t = tasks.get(taskNum - 1);
             t.markDone();
             System.out.println("    Nice! I've marked this task as done:");
             System.out.println("      " + "[" + t.getStatusIcon() + "] " + t.getDescription());
@@ -150,10 +149,10 @@ public class Yola {
         try {
             int taskNum = Integer.parseInt(commandBody);
             // Check for out of bound
-            if (taskNum >size) {
+            if (taskNum > tasks.size()) {
                 throw new IndexOutOfBoundsException();
             }
-            Task t = tasks[taskNum - 1];
+            Task t = tasks.get(taskNum - 1);
             t.markUndone();
             printDivider();
             System.out.println("        OK, I've marked this task as not done yet:");
@@ -167,8 +166,9 @@ public class Yola {
 
     }
 
+    public void delete(){
 
-
+    }
 
     private static void printGoodbye() {
         printDivider();
