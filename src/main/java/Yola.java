@@ -26,17 +26,7 @@ public class Yola {
 
     public static void main(String[] args) {
 
-        String logo = " __   __      _       \n"
-                + " \\ \\ / /___  | | __ _ \n"
-                + "  \\ V // _ \\ | |/ _` |\n"
-                + "   | || (_) || | (_| |\n"
-                + "   |_| \\___/ |_|\\__,_|\n";
-
-        System.out.println("Hello from\n" + logo);
-        printDivider();
-        System.out.println("    Hello! I'm Yola");
-        System.out.println("    What can I do for you?");
-        printDivider();
+        printWelcomeMessage();
 
         String line;
         Scanner in = new Scanner(System.in);
@@ -119,6 +109,21 @@ public class Yola {
         }
 
     }
+
+    private static void printWelcomeMessage() {
+        String logo = " __   __      _       \n"
+                + " \\ \\ / /___  | | __ _ \n"
+                + "  \\ V // _ \\ | |/ _` |\n"
+                + "   | || (_) || | (_| |\n"
+                + "   |_| \\___/ |_|\\__,_|\n";
+
+        System.out.println("Hello from\n" + logo);
+        printDivider();
+        System.out.println("    Hello! I'm Yola");
+        System.out.println("    What can I do for you?");
+        printDivider();
+    }
+
     private static void markTask(String commandBody) {
 
         try {
