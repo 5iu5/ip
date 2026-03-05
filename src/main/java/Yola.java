@@ -8,12 +8,24 @@ import java.nio.file.Path;
 import java.io.FileWriter;
 
 public class Yola {
-
+    private static Ui ui = new Ui();
     private static final ArrayList<Task> tasks = new ArrayList<>();
+
+    public Yola(String filePath){
+        //instantiate ui
+        ui = new Ui();
+//        storage = new Storage(filePath);
+//        try {
+//            tasks = new TaskList(storage.load());
+//        } catch (DukeException e) {
+//            ui.showLoadingError();
+//            tasks = new TaskList();
+//        }
+    }
 
     public static void main(String[] args) {
 
-        printWelcomeMessage();
+        ui.printWelcomeMessage();
 
         // File path with cross-platform support
         String home = System.getProperty("user.home");
@@ -23,8 +35,8 @@ public class Yola {
         try {
             loadFile(filePath);
         } catch (IOException e) {
-            System.out.println("    Error creating file: " + e.getMessage());
-            System.out.println("    Exiting.......");
+            ui.printLine("Error creating file: " + e.getMessage());
+            ui.printLine("Exiting.......");
             return;
         }
 
@@ -35,7 +47,7 @@ public class Yola {
 
             line = in.nextLine();
             if (line.equals("bye")) {
-                printGoodbye();
+                ui.printGoodbye();
                 break;
             }
 
@@ -46,7 +58,7 @@ public class Yola {
 
             switch (commandWord) {
             case "list":
-                printTasks();
+                ui.printTasks(tasks);
                 break;
             case "mark":
                 markTask(commandBody);
@@ -64,15 +76,13 @@ public class Yola {
                 // get the string after "todo "
                 String todoDescription = commandBody.trim();
                 if (todoDescription.isEmpty()) {
-                    printDivider();
-                    System.out.println("     no no no... The description must not be empty. Pls try again");
-                    printDivider();
+                    ui.printMessage("no no no... The description must not be empty. Pls try again");
                     break;
                 }
                 Todo t = new Todo(todoDescription.strip());
                 tasks.add(t);
                 saveToFile(filePath);
-                printTask(t);
+                ui.printTaskAdded(t, tasks.size());
                 break;
             case "deadline":
                 String deadlineDescription;
@@ -81,15 +91,13 @@ public class Yola {
                     deadlineDescription = Deadline.getDescription(commandBody);
                     deadlineBy = Deadline.getDeadline(commandBody);
                 } catch (YolaException e) {
-                    printDivider();
-                    System.out.println("    " + e.getMessage());
-                    printDivider();
+                    ui.printMessage(e.getMessage());
                     break;
                 }
                 Deadline d = new Deadline(deadlineDescription, deadlineBy);
                 tasks.add(d);
                 saveToFile(filePath);
-                printTask(d);
+                ui.printTaskAdded(d, tasks.size());
                 break;
             case "event":
                 line = line.substring(6).strip();
@@ -99,49 +107,14 @@ public class Yola {
                 Event e = new Event(eventDescription, from, to);
                 tasks.add(e);
                 saveToFile(filePath);
-                printTask(e);
+                ui.printTaskAdded(e, tasks.size());
                 break;
 
             default:
-                printDivider();
-                System.out.println("    What was that? I don't quite understand");
-                printDivider();
+                ui.printMessage("What was that? I don't quite understand");
                 break;
             }
-
         }
-
-    }
-
-    private static void printWelcomeMessage() {
-        String logo = " __   __      _       \n"
-                + " \\ \\ / /___  | | __ _ \n"
-                + "  \\ V // _ \\ | |/ _` |\n"
-                + "   | || (_) || | (_| |\n"
-                + "   |_| \\___/ |_|\\__,_|\n";
-
-        System.out.println("Hello from\n" + logo);
-        printDivider();
-        System.out.println("    Hello! I'm Yola");
-        System.out.println("    What can I do for you?");
-        printDivider();
-    }
-    public static void printTasks() {
-        printDivider();
-        System.out.println("    Here are the tasks in your list:");
-        for (int i = 0; i < tasks.size(); i += 1) {
-            System.out.println("    " + (i + 1) + "." + tasks.get(i).toString());
-        }
-        printDivider();
-    }
-
-    public static void printTask(Task t) {
-        printDivider();
-        System.out.println("    Got it. I've added this task:");
-        System.out.println("      " + t.toString());
-        System.out.println("    Now you have " + tasks.size() + " tasks in the list.");
-        printDivider();
-
     }
 
     private static void markTask(String commandBody) {
@@ -155,9 +128,8 @@ public class Yola {
 
             Task t = tasks.get(taskNum - 1);
             t.markDone();
-            System.out.println("    Nice! I've marked this task as done:");
-            System.out.println("      " + t);
-            printDivider();
+            ui.printTaskMarked(t);
+
         } catch (NumberFormatException e) {
             System.out.println("Please enter a task number");
         } catch (IndexOutOfBoundsException e) {
@@ -176,10 +148,8 @@ public class Yola {
             }
             Task t = tasks.get(taskNum - 1);
             t.markUndone();
-            printDivider();
-            System.out.println("        OK, I've marked this task as not done yet:");
-            System.out.println("      " + t);
-            printDivider();
+            ui.printTaskUnmarked(t);
+
         } catch (NumberFormatException e) {
             System.out.println("Please enter a task number");
         } catch (IndexOutOfBoundsException e) {
@@ -202,11 +172,7 @@ public class Yola {
             tasks.remove(taskIndex);
 
             // Print successfully deletion message
-            printDivider();
-            System.out.println("        Roger! Successfully delete the task:");
-            System.out.println("      " + taskString);
-            System.out.println("        Now you have " + tasks.size() + " tasks remaining in the list.");
-            printDivider();
+            ui.printTaskDeleted(t, tasks.size());
 
         } catch (NumberFormatException e) {
             System.out.println("Please enter a task number");
@@ -215,15 +181,6 @@ public class Yola {
         }
     }
 
-    private static void printGoodbye() {
-        printDivider();
-        System.out.println("    Bye. Hope to see you again soon!");
-        printDivider();
-    }
-
-    private static void printDivider() {
-        System.out.println("    ____________________________________________________________");
-    }
 
     private static void loadFile(Path path) throws IOException {
 
@@ -232,7 +189,7 @@ public class Yola {
 
             Files.createDirectories(path.getParent());
             Files.createFile(path);
-            System.out.println("    Created file yola.txt at: " + path);
+            ui.printLine("Created file yola.txt at: " + path);
         }
 
         ArrayList<String> lines = new ArrayList<>(Files.readAllLines(path));
@@ -289,7 +246,7 @@ public class Yola {
             }
 
         } catch (IOException e){
-            System.out.println("Error writing to file: " + e.getMessage());
+            ui.printLine("Error writing to file: " + e.getMessage());
         }
     }
 }
