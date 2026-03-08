@@ -1,3 +1,7 @@
+package yola;
+
+import yola.task.Task;
+
 import java.util.ArrayList;
 
 public class Ui {
@@ -27,7 +31,7 @@ public class Ui {
 
         System.out.println("Hello from\n" + logo);
         printDivider();
-        System.out.println(indent + "Hello! I'm Yola");
+        System.out.println(indent + "Hello! I'm yola.Yola");
         System.out.println(indent + "What can I do for you?");
         printDivider();
     }

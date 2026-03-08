@@ -1,3 +1,5 @@
+package exception;
+
 public class YolaException extends Exception {
 
     public YolaException(String message) {

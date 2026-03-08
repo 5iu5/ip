@@ -1,3 +1,5 @@
+package yola;
+
 public class Deadline extends Task {
     protected String by;
 
@@ -12,7 +14,7 @@ public class Deadline extends Task {
         }
         String[] parts = body.split(" /by", 2);
         if (parts.length < 2 || parts[1].trim().isEmpty()) {
-            throw new YolaException("Deadline is not filled!! Please input the deadline!!");
+            throw new YolaException("yola.Deadline is not filled!! Please input the deadline!!");
         }
         return parts[1];
     }
