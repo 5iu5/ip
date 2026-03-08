@@ -11,7 +11,22 @@ import yola.command.MarkCommand;
 import yola.command.TodoCommand;
 import yola.command.UnmarkCommand;
 
+/**
+ * Parses raw user input and converts it into the corresponding command object.
+ * <p>
+ * Identifies the command word and its accompanying arguments,
+ * then calls the appropriate command.
+ */
 public class Parser {
+    /**
+     * Parses the given user input into a specific command object.
+     * <p>
+     * The first word of the input is treated as the command word,
+     * while the remaining part is treated as the command body.
+     *
+     * @param input the full string given by the user
+     * @return the corresponding command object based on the command word
+     */
     public static Command parse(String input){
         // Split user input into command word and command body (the remaining line)
         String[] commands = input.strip().split("\\s+", 2);

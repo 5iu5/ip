@@ -6,6 +6,9 @@ import yola.storage.StorageFile;
 import yola.ui.Ui;
 import java.io.IOException;
 
+/**
+ * Represents a command that marks a task as done.
+ */
 public class MarkCommand extends Command {
     private final String commandBody;
 
@@ -13,6 +16,14 @@ public class MarkCommand extends Command {
         this.commandBody = commandBody;
     }
 
+    /**
+     * Executes the mark command by marking the specified task as done, and
+     * saving the updated task list
+     *
+     * @param tasks the task list containing the task to mark
+     * @param ui the user interface used to display output
+     * @param storage the storage handler used to save the updated task list
+     */
     @Override
     public void execute(TaskList tasks, Ui ui, StorageFile storage) {
         try {

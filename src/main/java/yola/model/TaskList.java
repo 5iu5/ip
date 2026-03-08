@@ -3,6 +3,9 @@ import yola.task.Task;
 
 import java.util.ArrayList;
 
+/**
+ * Represents a list of tasks managed by Yola chatbot.
+ */
 public class TaskList {
     private final ArrayList<Task> tasks;
 
@@ -34,10 +37,23 @@ public class TaskList {
         return tasks.isEmpty();
     }
 
+    /**
+     * Returns the list of tasks.
+     *
+     * @return the list of tasks
+     */
     public ArrayList<Task> getTasks() {
         return tasks;
     }
 
+    /**
+     * Returns a list of tasks whose descriptions contain the given keyword.
+     * <p>
+     * The search is case-insensitive.
+     *
+     * @param keyword the keyword used to search task descriptions
+     * @return a list of tasks matching the keyword
+     */
     public ArrayList<Task> findTasks(String keyword) {
         ArrayList<Task> matchingTasks = new ArrayList<>();
         for (Task task: tasks){
@@ -47,5 +63,4 @@ public class TaskList {
         }
         return matchingTasks;
     }
-
 }

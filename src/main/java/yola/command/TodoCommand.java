@@ -8,6 +8,9 @@ import yola.ui.Ui;
 
 import java.io.IOException;
 
+/**
+ * Represents a command that adds a todo task to the task list.
+ */
 public class TodoCommand extends Command{
     private final String commandBody;
 
@@ -15,6 +18,15 @@ public class TodoCommand extends Command{
         this.commandBody = commandBody;
     }
 
+    /**
+     * Executes the todo command by validating the input,
+     * creating a todo task, adding it to the task list, and
+     * saving the updated list.
+     *
+     * @param tasks the task list to add the todo task to
+     * @param ui the user interface used to display output
+     * @param storage the storage handler used to save the updated task list
+     */
     @Override
     public void execute(TaskList tasks, Ui ui, StorageFile storage) {
         try {

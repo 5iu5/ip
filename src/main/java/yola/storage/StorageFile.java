@@ -14,15 +14,35 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 
 
-
+/**
+ * Handles loading tasks from and saving tasks to a file.
+ * <p>
+ * This class is responsible for reading stored task data,
+ * converting each line into the corresponding task object,
+ * and writing task data back to the storage file.
+ */
 public class StorageFile {
 
     private final Path filePath;
 
+    /**
+     * Creates a storage handler for the specified file path.
+     *
+     * @param filePathString the path to the storage file
+     */
     public StorageFile(String filePathString) {
         this.filePath = Paths.get(filePathString);
     }
 
+    /**
+     * Loads tasks from the storage file into a {@code TaskList}.
+     * <p>
+     * If the file does not exist, the required directories and file
+     * are created, and an empty task list is returned.
+     *
+     * @return the task list loaded from the file
+     * @throws IOException if an error occurs while reading or creating the file
+     */
     public TaskList loadFile() throws IOException {
         TaskList tasks = new TaskList();
         // Check whether the file exists
@@ -48,7 +68,6 @@ public class StorageFile {
     }
 
     private Task parseTask(String line){
-
         String[] words = line.split(" \\| ");
         String command = words[0];
         boolean isDone = words[1].equals("1");
@@ -83,6 +102,12 @@ public class StorageFile {
         }
     }
 
+    /**
+     * Saves all tasks in the given task list to the storage file.
+     *
+     * @param tasks the task list to be saved
+     * @throws IOException if an error occurs while writing to the file
+     */
     public void saveToFile(TaskList tasks) throws IOException {
         try (FileWriter fw = new FileWriter(filePath.toString())) {
             for (Task t : tasks.getTasks()) {

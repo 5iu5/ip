@@ -7,6 +7,9 @@ import yola.task.Event;
 import yola.ui.Ui;
 import java.io.IOException;
 
+/**
+ * Represents a command that adds an event task to the task list.
+ */
 public class EventCommand extends Command {
     private final String commandBody;
 
@@ -14,6 +17,15 @@ public class EventCommand extends Command {
         this.commandBody = commandBody;
     }
 
+    /**
+     * Executes the event command by parsing the input,
+     * creating an event task, adding it to the task list,
+     * and saving the updated list.
+     *
+     * @param tasks the task list to add the event task to
+     * @param ui the user interface used to display output
+     * @param storage the storage handler used to save the updated task list
+     */
     @Override
     public void execute(TaskList tasks, Ui ui, StorageFile storage) {
         try {
