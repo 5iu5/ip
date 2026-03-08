@@ -6,6 +6,5 @@ public class YolaException extends Exception {
 
         super(message);
 
-
     }
 }

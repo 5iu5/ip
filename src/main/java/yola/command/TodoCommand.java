@@ -1,13 +1,12 @@
 package yola.command;
 
 import yola.exception.YolaException;
+import yola.model.TaskList;
 import yola.storage.StorageFile;
-import yola.task.Task;
 import yola.task.Todo;
 import yola.ui.Ui;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class TodoCommand extends Command{
     private final String commandBody;
@@ -17,7 +16,7 @@ public class TodoCommand extends Command{
     }
 
     @Override
-    public void execute(ArrayList<Task> tasks, Ui ui, StorageFile storage) {
+    public void execute(TaskList tasks, Ui ui, StorageFile storage) {
         try {
             String description = commandBody.trim();
 

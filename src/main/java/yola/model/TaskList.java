@@ -18,7 +18,7 @@ public class TaskList {
         tasks.add(task);
     }
 
-    public Task delete(int index) {
+    public Task remove(int index) {
         return tasks.remove(index);
     }
 

@@ -1,11 +1,11 @@
 package yola.command;
 
+import yola.model.TaskList;
 import yola.storage.StorageFile;
 import yola.task.Task;
 import yola.ui.Ui;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 
 public class UnmarkCommand extends Command{
@@ -16,7 +16,7 @@ public class UnmarkCommand extends Command{
     }
 
     @Override
-    public void execute(ArrayList<Task> tasks, Ui ui, StorageFile storage) {
+    public void execute(TaskList tasks, Ui ui, StorageFile storage) {
         try {
             int taskNum = Integer.parseInt(commandBody);
 

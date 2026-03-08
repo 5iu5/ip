@@ -1,13 +1,11 @@
 package yola.command;
 
 import yola.exception.YolaException;
+import yola.model.TaskList;
 import yola.storage.StorageFile;
 import yola.task.Event;
-import yola.task.Task;
 import yola.ui.Ui;
-
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class EventCommand extends Command {
     private final String commandBody;
@@ -17,7 +15,7 @@ public class EventCommand extends Command {
     }
 
     @Override
-    public void execute(ArrayList<Task> tasks, Ui ui, StorageFile storage) {
+    public void execute(TaskList tasks, Ui ui, StorageFile storage) {
         try {
             String[] parts = parseEventParts(commandBody);
             String description = parts[0];

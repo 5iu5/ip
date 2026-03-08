@@ -1,10 +1,10 @@
 package yola.storage;
 
+import yola.model.TaskList;
 import yola.task.Deadline;
 import yola.task.Event;
 import yola.task.Task;
 import yola.task.Todo;
-import yola.ui.Ui;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -23,8 +23,8 @@ public class StorageFile {
         this.filePath = Paths.get(filePathString);
     }
 
-    public ArrayList<Task> loadFile() throws IOException {
-        ArrayList<Task> tasks = new ArrayList<>();
+    public TaskList loadFile() throws IOException {
+        TaskList tasks = new TaskList();
         // Check whether the file exists
         if (!Files.exists(filePath)) {
             // Create the file if it does not exist
@@ -83,9 +83,9 @@ public class StorageFile {
         }
     }
 
-    public void saveToFile(ArrayList<Task> tasks) throws IOException {
+    public void saveToFile(TaskList tasks) throws IOException {
         try (FileWriter fw = new FileWriter(filePath.toString())) {
-            for (Task t : tasks) {
+            for (Task t : tasks.getTasks()) {
                 fw.write(t.getFileText());
                 fw.write(System.lineSeparator());
             }

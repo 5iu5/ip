@@ -79,5 +79,12 @@ public class Ui {
         printDivider();
     }
 
+    public void printInvalidCommand() {
+        printDivider();
+        printLine("What was that? I don't quite understand. Available commands");
+        printLine("These are the valid commands: list, todo, deadline, event, mark, unmark, delete, bye");
+        printDivider();
+    }
+
 
 }

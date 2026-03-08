@@ -1,11 +1,11 @@
 package yola.command;
 
+import yola.model.TaskList;
 import yola.storage.StorageFile;
 import yola.task.Task;
 import yola.ui.Ui;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class DeleteCommand extends Command {
     private final String commandBody;
@@ -15,7 +15,7 @@ public class DeleteCommand extends Command {
     }
 
     @Override
-    public void execute(ArrayList<Task> tasks, Ui ui, StorageFile storage) {
+    public void execute(TaskList tasks, Ui ui, StorageFile storage) {
         try {
             int taskNum = Integer.parseInt(commandBody);
 
