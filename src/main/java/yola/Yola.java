@@ -26,19 +26,14 @@ public class Yola {
             tasks = storage.loadFile();
             ui.printLine("Success loading file");
         } catch (IOException e) {
-            ui.printLine("Error loading file: " + e.getMessage());
+            ui.printLoadingError(e.getMessage());
             tasks = new TaskList();
-
         }
 
     }
 
-    public static void main(String[] args) {
-        final String STORAGE_FILEPATH = "./data/yola.txt";
-        new Yola(STORAGE_FILEPATH);
-
+    public void run() {
         ui.printWelcomeMessage();
-
 
         Scanner in = new Scanner(System.in);
 
@@ -51,6 +46,11 @@ public class Yola {
                 break;
             }
         }
+    }
+
+    public static void main(String[] args) {
+        final String STORAGE_FILEPATH = "./data/yola.txt";
+        new Yola(STORAGE_FILEPATH).run();
     }
 
 }
