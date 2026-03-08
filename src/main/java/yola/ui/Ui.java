@@ -6,14 +6,14 @@ import java.util.ArrayList;
 
 public class Ui {
 
-    private final String indent = "    ";
+    private static final String INDENT = "    ";
 
     public void printDivider() {
         System.out.println("    ____________________________________________________________");
     }
 
     public void printLine(String msg) {
-        System.out.println(indent + msg);
+        System.out.println(INDENT + msg);
     }
 
     public void printMessage(String msg) {

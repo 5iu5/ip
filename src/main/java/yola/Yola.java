@@ -12,19 +12,28 @@ import java.io.IOException;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.nio.file.Files;
-import java.io.File;
 import java.nio.file.Paths;
 import java.nio.file.Path;
 import java.io.FileWriter;
 
 public class Yola {
+    private static StorageFile storage;
     private static Ui ui = new Ui();
-    private static final ArrayList<Task> tasks = new ArrayList<>();
+    private static ArrayList<Task> tasks;
 
     public Yola(String filePath){
         //instantiate ui
         ui = new Ui();
-//        storage = new Storage(filePath);
+        storage = new StorageFile(filePath);
+        ui.printLine("Entered here");
+        try {
+            tasks = storage.loadFile();
+            ui.printLine("Success loading file");
+        } catch (IOException e) {
+            ui.printLine("Error loading file: " + e.getMessage());
+            tasks = new ArrayList<>();
+
+        }
 //        try {
 //            tasks = new TaskList(storage.load());
 //        } catch (DukeException e) {
@@ -34,21 +43,10 @@ public class Yola {
     }
 
     public static void main(String[] args) {
+        final String STORAGE_FILEPATH = "./data/yola.txt";
+        new Yola(STORAGE_FILEPATH);
 
         ui.printWelcomeMessage();
-
-        // File path with cross-platform support
-        String home = System.getProperty("user.home");
-        // File path format is C:/Users/user/yola/data
-        Path filePath = Paths.get(home, "yola", "data", "yola.txt");
-
-        try {
-            loadFile(filePath);
-        } catch (IOException e) {
-            ui.printLine("Error creating file: " + e.getMessage());
-            ui.printLine("Exiting.......");
-            return;
-        }
 
         String line;
         Scanner in = new Scanner(System.in);
@@ -72,15 +70,27 @@ public class Yola {
                 break;
             case "mark":
                 markTask(commandBody);
-                saveToFile(filePath);
+                try {
+                    storage.saveToFile(tasks);
+                } catch (IOException error) {
+                    ui.printMessage("Error saving file: " + error.getMessage());
+                }
                 break;
             case "unmark":
                 unmarkTask(commandBody);
-                saveToFile(filePath);
+                try {
+                    storage.saveToFile(tasks);
+                } catch (IOException error) {
+                    ui.printMessage("Error saving file: " + error.getMessage());
+                }
                 break;
             case "delete":
                 deleteTask(commandBody);
-                saveToFile(filePath);
+                try {
+                    storage.saveToFile(tasks);
+                } catch (IOException error) {
+                    ui.printMessage("Error saving file: " + error.getMessage());
+                }
                 break;
             case "todo":
                 // get the string after "todo "
@@ -91,7 +101,11 @@ public class Yola {
                 }
                 Todo t = new Todo(todoDescription.strip());
                 tasks.add(t);
-                saveToFile(filePath);
+                try {
+                    storage.saveToFile(tasks);
+                } catch (IOException error) {
+                    ui.printMessage("Error saving file: " + error.getMessage());
+                }
                 ui.printTaskAdded(t, tasks.size());
                 break;
             case "deadline":
@@ -106,7 +120,11 @@ public class Yola {
                 }
                 Deadline d = new Deadline(deadlineDescription, deadlineBy);
                 tasks.add(d);
-                saveToFile(filePath);
+                try {
+                    storage.saveToFile(tasks);
+                } catch (IOException error) {
+                    ui.printMessage("Error saving file: " + error.getMessage());
+                }
                 ui.printTaskAdded(d, tasks.size());
                 break;
             case "event":
@@ -116,7 +134,11 @@ public class Yola {
                 String to = line.split(" /from ")[1].split(" /to ")[1];
                 Event e = new Event(eventDescription, from, to);
                 tasks.add(e);
-                saveToFile(filePath);
+                try {
+                    storage.saveToFile(tasks);
+                } catch (IOException error) {
+                    ui.printMessage("Error saving file: " + error.getMessage());
+                }
                 ui.printTaskAdded(e, tasks.size());
                 break;
 
@@ -188,75 +210,6 @@ public class Yola {
             System.out.println("Please enter a task number");
         } catch (IndexOutOfBoundsException e) {
             System.out.println("The task number you entered is out of bound, please try again with a valid number");
-        }
-    }
-
-
-    private static void loadFile(Path path) throws IOException {
-
-        // Check whether the file exists
-        if (!Files.exists(path)) {
-
-            Files.createDirectories(path.getParent());
-            Files.createFile(path);
-            ui.printLine("Created file yola.txt at: " + path);
-        }
-
-        ArrayList<String> lines = new ArrayList<>(Files.readAllLines(path));
-
-        for (String line: lines){
-            Task t = parseTask(line);
-            if (t != null){
-                tasks.add(t);
-            }
-        }
-    }
-
-    private static Task parseTask(String line){
-
-        String[] words = line.split(" \\| ");
-        String command = words[0];
-        boolean isDone = words[1].equals("1");
-
-        switch (command) {
-        case "T":
-            String todoDescription = words[2];
-            Todo t = new Todo(todoDescription);
-            if (isDone){
-                t.markDone();
-            }
-            return t;
-        case "D":
-            String deadlineDescription = words[2];
-            String deadlineBy = words[3];
-            Deadline d = new Deadline(deadlineDescription, deadlineBy);
-            if (isDone){
-                d.markDone();
-            }
-            return d;
-        case "E":
-            String eventDescription = words[2];
-            String eventFrom = words[3];
-            String eventTo = words[4];
-            Event e = new Event(eventDescription, eventFrom, eventTo);
-            if (isDone){
-                e.markDone();
-            }
-            return e;
-        default:
-            return null;
-        }
-    }
-
-    private static void saveToFile(Path path) {
-        try (FileWriter fw = new FileWriter(path.toString())){
-            for (Task t: tasks){
-                fw.write(t.getFileText());
-                fw.write(System.lineSeparator());
-            }
-
-        } catch (IOException e){
-            ui.printLine("Error writing to file: " + e.getMessage());
         }
     }
 }
