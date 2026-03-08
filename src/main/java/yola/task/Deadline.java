@@ -1,7 +1,5 @@
 package yola.task;
 
-import yola.exception.YolaException;
-
 public class Deadline extends Task {
     protected String by;
 

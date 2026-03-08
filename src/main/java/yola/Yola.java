@@ -6,11 +6,8 @@ import yola.parser.Parser;
 import yola.storage.StorageFile;
 import yola.ui.Ui;
 
-
 import java.io.IOException;
 import java.util.Scanner;
-import java.util.ArrayList;
-
 
 public class Yola {
     private static StorageFile storage;
@@ -29,7 +26,6 @@ public class Yola {
             ui.printLoadingError(e.getMessage());
             tasks = new TaskList();
         }
-
     }
 
     public void run() {
