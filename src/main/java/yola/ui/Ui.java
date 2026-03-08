@@ -8,12 +8,12 @@ public class Ui {
 
     private static final String INDENT = "    ";
 
-    public void printDivider() {
-        System.out.println("    ____________________________________________________________");
-    }
-
     public void printLine(String msg) {
         System.out.println(INDENT + msg);
+    }
+
+    public void printDivider() {
+        printLine("____________________________________________________________");
     }
 
     public void printMessage(String msg) {
@@ -31,8 +31,8 @@ public class Ui {
 
         System.out.println("Hello from\n" + logo);
         printDivider();
-        System.out.println(INDENT + "Hello! I'm yola.Yola");
-        System.out.println(INDENT + "What can I do for you?");
+        printLine("Hello! I'm Yola, your personal chatbot");
+        printLine("What can I do for you?");
         printDivider();
     }
 
@@ -42,9 +42,9 @@ public class Ui {
 
     public void printTasks(ArrayList<Task> tasks) {
         printDivider();
-        System.out.println("    Here are the tasks in your list:");
+        printLine("Here are the tasks in your list:");
         for (int i = 0; i < tasks.size(); i += 1) {
-            System.out.println("    " + (i + 1) + "." + tasks.get(i).toString());
+            printLine((i + 1) + "." + tasks.get(i).toString());
         }
         printDivider();
     }
@@ -90,5 +90,18 @@ public class Ui {
         printLine("Error loading file: " + errorMessage);
     }
 
+    public void printMatchingTasks(ArrayList<Task> tasks) {
+        printDivider();
+        if (tasks.isEmpty()){
+            printLine("There are no matching tasks...");
+        }
+        else {
+            printLine("Here are the matching tasks in your list:");
+            for (int i = 0; i < tasks.size(); i += 1) {
+                printLine((i + 1) + "." + tasks.get(i).toString());
+            }
+        }
+        printDivider();
+    }
 
 }

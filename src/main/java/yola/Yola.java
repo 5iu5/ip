@@ -18,10 +18,8 @@ public class Yola {
         //instantiate ui
         ui = new Ui();
         storage = new StorageFile(filePath);
-        ui.printLine("Entered here");
         try {
             tasks = storage.loadFile();
-            ui.printLine("Success loading file");
         } catch (IOException e) {
             ui.printLoadingError(e.getMessage());
             tasks = new TaskList();

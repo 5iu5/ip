@@ -4,6 +4,7 @@ import yola.command.DeadlineCommand;
 import yola.command.DeleteCommand;
 import yola.command.EventCommand;
 import yola.command.ExitCommand;
+import yola.command.FindCommand;
 import yola.command.InvalidCommand;
 import yola.command.ListCommand;
 import yola.command.MarkCommand;
@@ -22,6 +23,8 @@ public class Parser {
             return new ExitCommand();
         case "list":
             return new ListCommand();
+        case "find":
+            return new FindCommand(commandBody);
         case "mark":
             return new MarkCommand(commandBody);
         case "unmark":
