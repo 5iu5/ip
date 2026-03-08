@@ -1,4 +1,4 @@
-package exception;
+package yola.exception;
 
 public class YolaException extends Exception {
 

@@ -1,4 +1,4 @@
-package yola;
+package yola.ui;
 
 import yola.task.Task;
 
@@ -31,8 +31,8 @@ public class Ui {
 
         System.out.println("Hello from\n" + logo);
         printDivider();
-        System.out.println(indent + "Hello! I'm yola.Yola");
-        System.out.println(indent + "What can I do for you?");
+        System.out.println(INDENT + "Hello! I'm yola.Yola");
+        System.out.println(INDENT + "What can I do for you?");
         printDivider();
     }
 

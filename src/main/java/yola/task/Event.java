@@ -1,4 +1,4 @@
-package yola;
+package yola.task;
 
 public class Event extends Task {
     protected String from;
