@@ -86,5 +86,9 @@ public class Ui {
         printDivider();
     }
 
+    public void printLoadingError(String errorMessage) {
+        printLine("Error loading file: " + errorMessage);
+    }
+
 
 }
