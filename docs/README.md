@@ -8,9 +8,10 @@
 Yola is a command-line chatbot that helps you manage tasks such as todos, deadlines, and events.
 
 ## Quick start
-1. Run the program.
+1. Run the command `java -jar yola.jar` to start running the program.
 2. Type your commands into the chat.
 3. Yola will respond and update your task list automatically.
+4. To end the session with the chatbot, input the command `bye`.
 
 ## Yola Commands
 ## Add Todo task
